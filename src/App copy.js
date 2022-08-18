@@ -1,6 +1,6 @@
 import "./App.css";
 import Map from "./components/Map";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -76,25 +76,19 @@ export default function App() {
     setLongi(position.coords.longitude);
     setLivelocation(false);
   };
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      console.log("Geo Location Available");
-      console.log(livelocation);
-      if (livelocation) {
-        getposition();
-      }
-    } else {
-      console.log("Geo Not Available");
+  if (navigator.geolocation) {
+    console.log("Geo Location Available");
+    console.log(livelocation);
+    if (livelocation) {
+      getposition();
     }
-    const showPosition = (position) => {
-      // console.log(position.coords.latitude);
-      // console.log(position.coords.longitude);
-      setLati(position.coords.latitude);
-      setLongi(position.coords.longitude);
-      setLivelocation(false);
-    };
-  }, []);
+  } else {
+    console.log("Geo Not Available");
+  }
+  // const { isLoaded } = useLoadScript({
+  //   googleMapsApikey: "AIzaSyDpICQ0ywhJWL484i8jMbzzgQ5uciKmLq4",
+  // });
+  // if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <>
