@@ -1,6 +1,6 @@
 import "./App.css";
 import Map from "./components/Map";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -11,6 +11,7 @@ export default function App() {
   const [lati, setLati] = useState(36.171563);
   const [longi, setLongi] = useState(-115.1391009);
   const [livelocation, setLivelocation] = useState(true);
+  const [livePin, setlivePin] = useState([33.7295198, 73.0371536]);
   const {
     ready,
     value,
@@ -74,27 +75,24 @@ export default function App() {
     // console.log(position.coords.longitude);
     setLati(position.coords.latitude);
     setLongi(position.coords.longitude);
+    livePin[0] = position.coords.latitude;
+    livePin[1] = position.coords.longitude;
+    setlivePin([...livePin]);
     setLivelocation(false);
   };
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      console.log("Geo Location Available");
-      console.log(livelocation);
-      if (livelocation) {
-        getposition();
-      }
-    } else {
-      console.log("Geo Not Available");
+  if (navigator.geolocation) {
+    console.log("Geo Location Available");
+    console.log(livelocation);
+    if (livelocation) {
+      getposition();
     }
-    const showPosition = (position) => {
-      // console.log(position.coords.latitude);
-      // console.log(position.coords.longitude);
-      setLati(position.coords.latitude);
-      setLongi(position.coords.longitude);
-      setLivelocation(false);
-    };
-  }, []);
+  } else {
+    console.log("Geo Not Available");
+  }
+  // const { isLoaded } = useLoadScript({
+  //   googleMapsApikey: "AIzaSyDpICQ0ywhJWL484i8jMbzzgQ5uciKmLq4",
+  // });
+  // if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <>
@@ -122,7 +120,7 @@ export default function App() {
           </div>
         </div>
 
-        <Map lati={lati} longi={longi} />
+        <Map lati={lati} longi={longi} livePin={livePin} />
       </div>
     </>
   );
